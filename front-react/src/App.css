@@ -1,0 +1,39 @@
+.usuario-input {
+  padding: 25px;
+  margin: 15px 0 30px 0;
+  border-width: .2rem .2rem 0;
+  border-radius: 8px;
+  border: .2rem solid #ececec;
+}
+
+.usuario-title {
+  font-size: 2rem;
+  padding-bottom: 0.5rem;
+}
+
+.usuario-content {
+  color: #444;
+  font-size: 1.25rem;
+}
+
+#funnel {
+  height: 440px;
+  width:  600px;
+}
+#funnel .label {
+  font-size: 28px;
+}
+
+
+.delete-usuario-button {
+  margin-right: 15px;
+}
+
+.usuarios {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-width: .2rem .2rem 0;
+  border-radius: 8px;
+  border: .2rem solid #ececec;
+  width: 100%;
+}
