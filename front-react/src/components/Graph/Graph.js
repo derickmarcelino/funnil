@@ -25,7 +25,7 @@ class Graph extends React.Component {
         id="funnel"
         dataSource={this.props.graficos}
         palette="Soft Pastel"
-        argumentField="idFunil"
+        argumentField="nomeFunil"
         valueField="acessos"
         sortData={false}
         

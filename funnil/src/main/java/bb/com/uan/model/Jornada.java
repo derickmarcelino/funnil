@@ -17,19 +17,20 @@ public class Jornada extends PanacheEntityBase {
     public String nomeJornada;
     public String status;
     public int diasJanela;
-    public String tipoJanela;
+    public String matricula;
     
     public Jornada() {
     }
 
-    public Jornada(int idJornada, String inicioJanela, String fimJanela, String nomeJornada,String status,int diasJanela,String tipoJanela) {
+    public Jornada(int idJornada, String inicioJanela, String fimJanela, String nomeJornada, String status,
+            int diasJanela,  String matricula) {
         this.idJornada = idJornada;
         this.inicioJanela = inicioJanela;
         this.fimJanela = fimJanela;
         this.nomeJornada = nomeJornada;
-        this.status= status;
-        this.diasJanela=diasJanela;
-        this.tipoJanela=tipoJanela;
+        this.status = status;
+        this.diasJanela = diasJanela;
+        this.matricula = matricula;
     }
 
     public int getIdJornada() {
@@ -45,7 +46,7 @@ public class Jornada extends PanacheEntityBase {
     }
 
     public void setInicioJanela(String inicioJanela) {
-        this.inicioJanela = inicioJanela;
+        this.inicioJanela = inicioJanela+"-01";
     }
 
     public String getFimJanela() {
@@ -80,12 +81,14 @@ public class Jornada extends PanacheEntityBase {
         this.diasJanela = diasJanela;
     }
 
-    public String getTipoJanela() {
-        return tipoJanela;
+  
+
+    public String getMatricula() {
+        return matricula;
     }
 
-    public void setTipoJanela(String tipoJanela) {
-        this.tipoJanela = tipoJanela;
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
     }
 
     @Override
@@ -96,9 +99,9 @@ public class Jornada extends PanacheEntityBase {
         result = prime * result + ((fimJanela == null) ? 0 : fimJanela.hashCode());
         result = prime * result + idJornada;
         result = prime * result + ((inicioJanela == null) ? 0 : inicioJanela.hashCode());
+        result = prime * result + ((matricula == null) ? 0 : matricula.hashCode());
         result = prime * result + ((nomeJornada == null) ? 0 : nomeJornada.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
-        result = prime * result + ((tipoJanela == null) ? 0 : tipoJanela.hashCode());
         return result;
     }
 
@@ -125,6 +128,11 @@ public class Jornada extends PanacheEntityBase {
                 return false;
         } else if (!inicioJanela.equals(other.inicioJanela))
             return false;
+        if (matricula == null) {
+            if (other.matricula != null)
+                return false;
+        } else if (!matricula.equals(other.matricula))
+            return false;
         if (nomeJornada == null) {
             if (other.nomeJornada != null)
                 return false;
@@ -135,18 +143,13 @@ public class Jornada extends PanacheEntityBase {
                 return false;
         } else if (!status.equals(other.status))
             return false;
-        if (tipoJanela == null) {
-            if (other.tipoJanela != null)
-                return false;
-        } else if (!tipoJanela.equals(other.tipoJanela))
-            return false;
         return true;
     }
 
+    
     
     }
 
     
    
     
-}

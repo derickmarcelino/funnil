@@ -1,4 +1,5 @@
 package bb.com.uan.resource;
+
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -15,23 +16,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.annotations.Query;
+
 
 import bb.com.uan.model.Acessos;
 
 import javax.ws.rs.QueryParam;
 
-
-
 @Path("/acessos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AcessosResource {
-    
 
-    private Set<Acessos> acessos= new HashSet<>();
+    private Set<Acessos> acessos = new HashSet<>();
 
-    public AcessosResource(){
+    public AcessosResource() {
         acessos.add(new Acessos());
     }
 
@@ -42,37 +40,45 @@ public class AcessosResource {
 
     @GET
     @Path("{id}")
-    public Response listbyId(@QueryParam("id")int id) {
+    public Response listbyId(@QueryParam("id") int id) {
         return Response.ok(Acessos.findById(id)).build();
     }
 
     @GET
     @Path("/telas/{idTelas}")
-    public List<Acessos> listbyTelas(@PathParam("idTelas")int idTelas){
+    public List<Acessos> listbyTelas(@PathParam("idTelas") int idTelas) {
         return Acessos.list("idTelas =? 1", idTelas);
     }
 
     @GET
     @Path("/telas/acessos")
-    public List<Acessos> listbyAcessos(@QueryParam("idTelas") int idTelas,
-                              @QueryParam("diaInicio") Date diaInicio, 
-                              @QueryParam("diaFim") Date diaFim
+    public long listtbyAcessos(@QueryParam("idTelas") int idTelas,
+                               @QueryParam("dataInicio") Date dataInicio,
+                               @QueryParam("dataFim") Date dataFim
                             ){
-        return Acessos.list("totalAcessos where idTelas =? 1 and date(diaAcessos) between =? 2 and =? 3", idTelas,diaInicio,diaFim);
+                               List<Acessos> lista = Acessos.list("idTelas =? 1 ", idTelas);
+                               int cont=0; 
+                               for (int i=0;i<lista.size();i++){
+                                   if(lista.get(i).diaAcessos.compareTo(dataInicio) >= 0 && lista.get(i).diaAcessos.compareTo(dataFim) <= 0 ){
+                                    cont+=lista.get(i).totalAcessos;
+                                   }
+                                }
+        return cont;
     }
+
     @POST
     @Transactional
     public Response add(Acessos acessos) {
         acessos.persist();
-    return Response.ok(Acessos.listAll()).build();
-  }
-
-  @DELETE
-  @Transactional
-  public Response delete(Acessos acessos) {
-    Acessos.flush();
-    Acessos.deleteById(acessos.idAcessos);
-    //jornadas.delete();
-    return Response.ok().build();
-  }
+        return Response.ok(Acessos.listAll()).build();
     }
+
+    @DELETE
+    @Transactional
+    public Response delete(Acessos acessos) {
+        Acessos.flush();
+        Acessos.deleteById(acessos.idAcessos);
+        // jornadas.delete();
+        return Response.ok().build();
+    }
+}

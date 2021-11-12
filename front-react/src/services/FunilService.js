@@ -30,6 +30,7 @@ class FunilService {
     return http.get(`/funil?nomeAmigavel=${nomeAmigavel}`);
   }
 
+  
   findByIdJornada(idJornada) {
     return http.get(`/funil?idJornada=${idJornada}`);
 }

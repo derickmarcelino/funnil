@@ -1,5 +1,6 @@
 package bb.com.uan.resource;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -13,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import bb.com.uan.model.Funil;
 import bb.com.uan.model.Jornada;
 
 import javax.ws.rs.QueryParam;
@@ -48,6 +50,7 @@ public class JornadaResource {
         return Response.ok(Jornada.findById(id)).build();
     }
 
+    
 
     @POST
     @Transactional

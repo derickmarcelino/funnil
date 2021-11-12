@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from "./components/Header";
+import Header from './components/Header/Header.js';
 import Footer from "./components/Footer";
 import Navbar from "./components/Menu/Navbar";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -15,7 +15,9 @@ import './App.css';
 const App = () => {
   return (
     <Router>
-    <Navbar />
+     
+    <Navbar   />
+    
       <Switch>
       <Route path='/jornada' component={JornadaInput} />
       <Route path='/jornadalist' component={JornadaList} />

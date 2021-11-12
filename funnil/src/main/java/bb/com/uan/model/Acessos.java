@@ -1,5 +1,7 @@
 package bb.com.uan.model;
 
+import java.sql.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -15,12 +17,12 @@ public class Acessos extends PanacheEntityBase {
 
     public int idTelas;
 
-    public String diaAcessos;
+    public Date diaAcessos;
 
     public int totalAcessos;
 
     
-    public Acessos(int idAcessos, int idTelas, String diaAcessos, int totalAcessos) {
+    public Acessos(int idAcessos, int idTelas, Date diaAcessos, int totalAcessos) {
         this.idAcessos = idAcessos;
         this.idTelas = idTelas;
         this.diaAcessos = diaAcessos;
@@ -46,11 +48,11 @@ public class Acessos extends PanacheEntityBase {
         this.idTelas = idTelas;
     }
 
-    public String getDiaAcessos() {
+    public Date getDiaAcessos() {
         return diaAcessos;
     }
 
-    public void setDiaAcessos(String diaAcessos) {
+    public void setDiaAcessos(Date diaAcessos) {
         this.diaAcessos = diaAcessos;
     }
 
@@ -95,11 +97,7 @@ public class Acessos extends PanacheEntityBase {
             return false;
         return true;
     }
-
-   
-
-
-    
+ 
 }
 
 

@@ -41,6 +41,13 @@ public class TelasResource {
         return Response.ok(Telas.findById(id)).build();
     }
 
+    @GET
+    @Path("/url/{idTelas}")
+    public String findByID(@QueryParam("idTelas")int idTelas){
+        Telas tela = Telas.findById(idTelas);
+        return tela.urlAcesso;
+        
+          }
 
     @POST
     @Transactional

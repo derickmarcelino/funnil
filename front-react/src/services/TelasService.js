@@ -26,9 +26,13 @@ class TelasService {
     return http.delete(`/telas`);
   }
 
+  findByidTelas(idTelas) {
+    return http.get(`/telas/url/?idTelas=${idTelas}`);
+  }
   findByTitle(nomeAmigavel) {
     return http.get(`/telas?nomeAmigavel=${nomeAmigavel}`);
   }
+
 }
 
 export default new TelasService();

@@ -4,6 +4,7 @@ import FunilService from "../../services/FunilService.js";
 import JornadaService from "../../services/JornadaService.js";
 import TelasService from "../../services/TelasService.js";
 import Graph from "./Graph.js";
+import AcessosService from "../../services/AcessosService.js";
 
 class GraphList extends React.Component {
   constructor(props) {
@@ -13,12 +14,17 @@ class GraphList extends React.Component {
     this.onChangeFunis = this.onChangeFunis.bind(this);
     this.exibirGraficos = this.exibirGraficos.bind(this);
     this.getGraficos = this.getGraficos.bind(this);
+    this.onChangeAcessos = this.onChangeAcessos.bind(this);
+    
+
     this.state = {
       jornadas: [],
       funis: [],
       telas: [],
       nomeJornadaLoop: null,
       element: [],
+      acessos: [],
+      nomeFunil:null,
     };
   }
 
@@ -61,16 +67,43 @@ class GraphList extends React.Component {
           continue;
         } else {
           funisTemp = element2;
+          var elementAcess = this.state.acessos;
+          var idTelasTemp = funisTemp.idTelas;
+          console.log(elementAcess);
+          console.log(idTelasTemp);
+          if(elementAcess.length >0){
+            var reducer = (accumulator, curr) => accumulator + curr;
+            var filtroId = elementAcess.filter(elem => elem.idTelas == idTelasTemp);
+            console.log(filtroId);
+            console.log(this.element.inicioJanela+"Z");
+            var filtroDatMen = filtroId.filter(elemm => elemm.diaAcesssos >= this.element.inicioJanela);
+            console.log(filtroDatMen);
+            var filtroDatMai = filtroDatMen.filter(elementt => elementt.diaAcessos <= this.element.fimJanela);
+            console.log(filtroDatMai);
+            var filtroFinal = filtroId.map(ee => ee.totalAcessos);
+            console.log(filtroFinal);
+            if(filtroFinal.length>0){
+            var resultado = filtroFinal.reduce(reducer);
+          funisTemp.acessos=resultado;
+            }
+        }
+          
+          var nomeFunilTemp = this.state.telas.find(el => el.idTelas == idTelasTemp);
+         if(nomeFunilTemp){
+          funisTemp.nomeFunil=nomeFunilTemp.urlAcesso;
+         }
           funisConst.push(funisTemp);
           element3=element2.idJornada;
         }
+        
       }
       
       if (this.element.idJornada == element3) {
-
+     
         retorno.push(
           
       <Graph graficos={funisConst} titulo={this.nomeJornadaLoop} />
+      
         );
          }
     }
@@ -95,6 +128,12 @@ class GraphList extends React.Component {
     });
   }
 
+  onChangeAcessos() {
+    this.setState({
+      acessos: this.acessos,
+    });
+  }
+
   getGraficos() {
     JornadaService.getAll()
       .then((response) => {
@@ -108,14 +147,22 @@ class GraphList extends React.Component {
               funis: response.data,
             });
             console.log(response.data);
-
             TelasService.getAll()
               .then((response) => {
                 this.setState({
                   telas: response.data,
                 });
                 console.log(response.data);
-                this.exibirGraficos();
+                AcessosService.getAll()
+              .then((response) => {
+                this.setState({
+                  acessos: response.data,
+                });
+                console.log(response.data);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
               })
               .catch((e) => {
                 console.log(e);
