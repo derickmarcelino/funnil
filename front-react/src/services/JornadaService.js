@@ -14,6 +14,11 @@ class JornadaService {
     return http.get(`/jornada/status/${status}`);
   }
 
+  getByMatricula(matricula){
+
+    return http.get(`/jornada/matricula/${matricula}`);
+  }
+
   create(data) {
     return http.post("/jornada", data);
   }

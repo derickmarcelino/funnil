@@ -1,6 +1,5 @@
 package bb.com.uan.resource;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -14,7 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import bb.com.uan.model.Funil;
+
 import bb.com.uan.model.Jornada;
 
 import javax.ws.rs.QueryParam;
@@ -42,6 +41,12 @@ public class JornadaResource {
     @Path("/status/{status}")
     public Response listbyStatus(@PathParam("status")String status) {
         return Response.ok(Jornada.find("status = ?1",status)).build();
+    }
+
+    @GET
+    @Path("/matricula/{matricula}")
+    public Response listbyJornada(@PathParam("matricula") String matricula) {
+        return Response.ok(Jornada.find("matricula", matricula).list()).build();
     }
 
     @GET

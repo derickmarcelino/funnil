@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DataGrid, {
-  FilterRow,
+  FilterRow,Editing, Column
 } from "devextreme-react/data-grid";
 import TelasService from "../../services/TelasService";
 import { Container } from "reactstrap";
@@ -48,8 +48,15 @@ class TelasList extends Component {
             showBorders={true}
             >
           <FilterRow visible={true} />
-          
+          <Editing
+            mode="cell"
+            allowUpdating="true"
+             />
+             
           </DataGrid>
+          <Column dataField="idTelas" allowEditing={false} allowUpdating={false} />
+              <Column dataField="urlAcesso" caption="UrlAcesso" allowEditing={false} allowUpdating={false}/>
+              <Column dataField="nomeAmigavel"  allowUpdating={true} allowEditing={true}/>
           </div>
           
             </Container>

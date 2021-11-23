@@ -20,14 +20,14 @@ class Graph extends React.Component {
   render() {
     console.log(this.props.graficos);
     return (
-        <Container>
+      <Container>
       <Funnel
         id="funnel"
         dataSource={this.props.graficos}
-        palette="Soft Pastel"
         argumentField="nomeFunil"
         valueField="acessos"
         sortData={false}
+      
         
       >
         <Title text={this.props.titulo}>
@@ -43,6 +43,7 @@ class Graph extends React.Component {
           position="inside"
           backgroundColor="none"
           customizeText={formatLabel}
+         
         />
       </Funnel>
       </Container>
@@ -56,5 +57,8 @@ class Graph extends React.Component {
 function formatLabel(arg) {
     return `<span class="label">${arg.percentText}</span><br/>${arg.item.argument}`;
   }
+
+  
+
 
 export default Graph;

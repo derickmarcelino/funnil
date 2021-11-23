@@ -2,12 +2,16 @@ import React, { Component } from "react";
 import {
   TreeList,
   Scrolling,
+  Editing,
   Paging,
   Pager,
   Column,
   Selection,
   FilterRow,
 } from "devextreme-react/tree-list";
+import DataGrid, {
+  RowDragging, Sorting,
+} from 'devextreme-react/data-grid';
 import { Container } from "reactstrap";
 import TelasService from "../../services/TelasService.js";
 import FunilService from "../../services/FunilService.js";
@@ -36,6 +40,8 @@ class JornadaInput extends Component {
     this.onChangeFimJanela = this.onChangeFimJanela.bind(this);
     this.onChangeDiasJanela = this.onChangeDiasJanela.bind(this);
     this.onChangeMatricula = this.onChangeMatricula.bind(this);
+    this.inserirTelas = this.inserirTelas.bind(this);
+  
 
     this.state = {
       funis: [],
@@ -58,6 +64,7 @@ class JornadaInput extends Component {
       errorMessage: null,
       periodoJanela: 0,
       matricula: null,
+      telasFim: [],
     };
   }
 
@@ -85,6 +92,8 @@ class JornadaInput extends Component {
     });
   }
 
+
+  
   onChangeFimJanela(e) {
     this.setState({
       fimJanela: e.target.value,
@@ -113,6 +122,7 @@ class JornadaInput extends Component {
     this.setState({
       matricula: e.target.value,
     });
+    
   }
 
   gravarJornada() {
@@ -161,6 +171,10 @@ class JornadaInput extends Component {
     this.gravarJornada();
   }
 
+  inserirTelas(){
+
+  }
+
   gravarFunil() {
     let array = JSON.parse("[" + this.state.selectedRowKeys + "]");
 
@@ -170,8 +184,8 @@ class JornadaInput extends Component {
 
       var funilData = {
         idJornada: this.state.idJornada,
-        idTelas: element,
-        ordemAcesso: index + 1,
+        idTelas: this.state.rowSelected[index].idTelas,
+        ordemAcesso: this.state.rowSelected[index].ordem,
         acessos: 0,
       };
       FunilService.create(funilData)
@@ -286,6 +300,7 @@ class JornadaInput extends Component {
               parentIdExpr="Head_ID"
               onSelectionChanged={this.onSelectionChanged}
             >
+            
               <FilterRow visible={true} />
               <Scrolling mode="standard" />
               <Paging enabled={true} defaultPageSize={10} />
@@ -295,14 +310,35 @@ class JornadaInput extends Component {
                 showInfo={true}
               />
               <Selection recursive={recursive} mode="multiple" />
-              <Column dataField="idTelas" />
-              <Column dataField="urlAcesso" caption="UrlAcesso" />
-              <Column dataField="nomeAmigavel" />
+              <Column dataField="idTelas" allowEditing={false} allowUpdating={false} />
+              <Column dataField="urlAcesso" caption="UrlAcesso" allowEditing={false} allowUpdating={false}/>
+              <Column dataField="nomeAmigavel"  allowUpdating={true} allowEditing={true}/>
             </TreeList>
+            
           </div>
-          <div>
+          
+          <React.Fragment>
+          <DataGrid
+          height={440}
+          dataSource={this.state.rowSelected}
+          keyExpr="idTelas"
+          defaultColumns={["ordem","idTelas","urlAcesso","nomeAmigavel"]}
+          showBorders={true}
+        >
+          <Editing
+            mode="row"
+            allowUpdating={true}
+            />
+            <RowDragging
+            allowReordering={true}
+            onReorder={this.onReorder}
+            showDragIcons={this.state.showDragIcons}
+          />
+        </DataGrid>
+      </React.Fragment>
+      <div>
             <button onClick={this.gravarCompleto} className="btn btn-success">
-              Criar Jornada
+             Adicionar Telas 
             </button>
           </div>
         </Container>
@@ -315,11 +351,31 @@ class JornadaInput extends Component {
       this.state.selectionMode
     );
     this.state.rowSelected = selectedData;
-
+    if(selectedData.length>0)
+    this.state.rowSelected[selectedData.length-1].ordem=selectedData.length;
     this.setState({
       selectedRowKeys: e.selectedRowKeys,
       selectedEmployeeNames: this.getEmployeeNames(selectedData),
     });
+    console.log(e.selectedRowKeys);
+    console.log(e);
+  
+    var ultimoClique = selectedData.slice(-1);
+    console.log(ultimoClique);
+    var addOrdem = {
+      ordem:1,
+      idTelas:null,
+      urlAcesso:null,
+      nomeAmigavel:null,
+    };
+    if(selectedData.length>0){
+    addOrdem.ordem=selectedData.length;
+    addOrdem.urlAcesso=ultimoClique[0].urlAcesso;
+    addOrdem.nomeAmigavel="";
+    addOrdem.idTelas=ultimoClique[0].idTelas;
+    this.state.telasFim.push(addOrdem);
+    }
+    console.log(this.state);
   }
 
   onRecursiveChanged(e) {

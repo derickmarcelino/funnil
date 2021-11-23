@@ -100,9 +100,9 @@ class GraphList extends React.Component {
       
       if (this.element.idJornada == element3) {
      
-        retorno.push(
+       retorno.push(
           
-      <Graph graficos={funisConst} titulo={this.nomeJornadaLoop} />
+      <Graph graficos={funisConst} titulo={this.nomeJornadaLoop}/>
       
         );
          }
