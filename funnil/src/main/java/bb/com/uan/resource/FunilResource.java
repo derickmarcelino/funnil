@@ -40,8 +40,8 @@ public class FunilResource {
 
     @GET
     @Path("/jornada/{idJornada}")
-    public Response listbyJornada(@PathParam("IdJornada") int idJornada) {
-        return Response.ok(Funil.find("IdJornada", idJornada).list()).build();
+    public Response listbyJornada(@PathParam("idJornada") int idJornada) {
+        return Response.ok(Funil.find("idJornada", idJornada).list()).build();
     }
 
     @POST

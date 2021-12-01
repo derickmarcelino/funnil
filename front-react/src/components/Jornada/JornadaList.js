@@ -4,6 +4,11 @@ import JornadaService from "../../services/JornadaService";
 import { Container } from "reactstrap";
 import Graph from "../Graph/Graph";
 import FunilService from "../../services/FunilService";
+import FunilHelper from "../Funil/FunilHelper";
+import JornadaHelper from "./JornadaHelper";
+import Form, {
+  SimpleItem, GroupItem, TabbedItem, TabPanelOptions, Tab,
+} from 'devextreme-react/form';
 import Funnel, {
   Title,
   Margin,
@@ -13,7 +18,10 @@ import Funnel, {
   Border,
   Label,
 } from "devextreme-react/funnel";
-
+import Frame from 'react-frame-component';
+import Box, {
+  
+} from 'devextreme-react/box';
 const columns = [
   "inicioJanela",
   "fimJanela",
@@ -28,13 +36,19 @@ class JornadaList extends Component {
     super(props);
     this.retrieveJornadas = this.retrieveJornadas.bind(this);
     this.onChangeMatricula = this.onChangeMatricula.bind(this);
+    this.showGraph = this.showGraph.bind(this);
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
+    this.startEdit = this.startEdit.bind(this);
     this.state = {
       jornadas: [],
       matricula: null,
       funil: [],
       titulo: null,
+      graficos: [],
+      result: [],
+      graf: false
     };
+
   }
 
   componentDidMount() {
@@ -42,6 +56,12 @@ class JornadaList extends Component {
   }
 
   
+  showGraph(idJornadaTemp){
+console.log(this.state);
+return FunilHelper.FunisJornada(idJornadaTemp);
+
+  }
+
 
   onChangeMatricula(e) {
     this.setState({
@@ -51,51 +71,59 @@ class JornadaList extends Component {
     this.retrieveJornadas();
   }
 
+
   onSelectionChanged({ selectedRowsData }) {
+    
     const data = selectedRowsData[0];
     console.log(data);
-    console.log(this.state);
+if(data != null){
     this.setState({
-      titulo: data.nomeJornada
+      titulo: data.nomeJornada,
+      graficos: data,
+      graf: !!data,
+     
     });
-    FunilService.findByIdJornada(data.idJornada)
-      .then((response) => {
-        this.setState({
-          funil: response.data,
-        });
-        console.log(response.data);
-        console.log(this.state);
-      })
-      .catch((e) => {
-        this.setState({ errorMessage: e.message });
-        console.log(e);
-      });
-  }
     
-  
- 
- 
-  
+    console.log(this.state);
+    console.log(this.state.graficos);
+    this.showGraph();
+  }
+  else{
+    this.state.graf = false;
+}
 
+  }
+  
+  startEdit(e){
+console.log(e);
+var idJornadaTemp = e.data.idJornada;
+this.showGraph(idJornadaTemp);
+
+  
+}
 
   retrieveJornadas() {
     console.log(this.state);
-
+  var jorn= [];
     JornadaService.getByMatricula(this.state.matricula)
       .then((response) => {
         this.setState({
           jornadas: response.data,
         });
         console.log(response.data);
+        this.state.graf = true;
       })
       .catch((e) => {
         console.log(e);
       });
+      return 
   }
 
   render() {
     return (
+
       <Container>
+        
         <div className="long-title">
           <h3>Minhas Jornadas</h3>
         </div>
@@ -111,6 +139,11 @@ class JornadaList extends Component {
             name="nomeJornada"
           />
         </div>
+        {
+        
+        
+        this.state.graf 
+        &&
         <div>
           <DataGrid
             dataSource={this.state.jornadas}
@@ -119,30 +152,42 @@ class JornadaList extends Component {
             hoverStateEnabled={true}
             showBorders={true}
             onSelectionChanged={this.onSelectionChanged}
-         
+            onRowClick={this.startEdit}
           >
         <Selection mode="single" />
           </DataGrid>
+         
+          <div>
           
-          <Funnel
-        id="funnel"
-        dataSource={this.state.funil}
-        argumentField="ordemAcesso"
-        valueField="idTelas"
-        sortData={false}
+          <Container>{this.showGraph()}</Container>
       
-        
-      ></Funnel>
+        <Form
+            colCount={2}
+            id="form"
+            formData={this.state}>
+            <GroupItem caption="Funil">
+              <SimpleItem dataField="titulo" />
+              <SimpleItem dataField="matricula" />
+            </GroupItem>
+          </Form>
+          </div>
         </div>
-        <div>
-          
-        </div>
+      }
       </Container>
     );
   }
 }
+
+
+
 function customizeColumns(columns) {
   columns[0].width = 70;
 }
+
+function formatLabel(arg) {
+  return `<span class="label">${arg.percentText}</span><br/>${arg.item.argument}`;
+}
+
+
 
 export default JornadaList;

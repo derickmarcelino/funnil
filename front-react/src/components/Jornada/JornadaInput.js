@@ -221,6 +221,8 @@ class JornadaInput extends Component {
         AcessosService.create(dataAcesso)
           .then((response) => {
             console.log(this.state);
+            this.state = null;
+            
           })
           .catch((e) => {
             this.setState({ errorMessage: e.message });

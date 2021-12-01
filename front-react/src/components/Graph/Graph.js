@@ -18,13 +18,14 @@ class Graph extends React.Component {
   }
    
   render() {
+    console.log(this.props);
     console.log(this.props.graficos);
     return (
       <Container>
       <Funnel
         id="funnel"
         dataSource={this.props.graficos}
-        argumentField="nomeFunil"
+        argumentField="idFunil"
         valueField="acessos"
         sortData={false}
       
@@ -43,7 +44,7 @@ class Graph extends React.Component {
           position="inside"
           backgroundColor="none"
           customizeText={formatLabel}
-         
+        
         />
       </Funnel>
       </Container>
